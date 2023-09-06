@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface FacultyService {
 
-    public Faculty addFaculty(Faculty faculty);
+    public Faculty create(Faculty faculty);
 
-    public Faculty findFaculty(long id);
+    public Faculty read(long id);
 
-    public Faculty editFaculty(Faculty faculty);
+    public Faculty update(Faculty faculty);
 
-    public Faculty deleteFaculty(long id);
+    public Faculty delete(long id);
 
-    List<Faculty> readAllFaculty(String color);
+    List<Faculty> readAll(String color);
 }

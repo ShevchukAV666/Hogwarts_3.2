@@ -2,8 +2,6 @@ package Hogwarts_32.Hogwarts.controllers;
 
 import Hogwarts_32.Hogwarts.models.Faculty;
 import Hogwarts_32.Hogwarts.interfases.FacultyService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,36 +17,28 @@ public class FacultyController {
     }
 
     @PostMapping
-    public Faculty createFaculty(@RequestBody Faculty faculty) {
-        return facultyService.addFaculty(faculty);
+    public Faculty create(@RequestBody Faculty faculty) {
+        return facultyService.create(faculty);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Faculty> getFacultyInfo(@PathVariable Long id) {
-        Faculty faculty = facultyService.findFaculty(id);
-        if (faculty == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(faculty);
+    @GetMapping("/{id}")
+    public Faculty read(@PathVariable long id) {
+        return facultyService.read(id);
     }
 
     @PutMapping
-    public ResponseEntity<Faculty> editFaculty(@RequestBody Faculty faculty) {
-        Faculty foundFaculty = facultyService.editFaculty(faculty);
-        if (foundFaculty == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        return ResponseEntity.ok(foundFaculty);
+    public Faculty update(@RequestBody Faculty faculty) {
+        return facultyService.update(faculty);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteFaculty(@PathVariable Long id) {
-        facultyService.deleteFaculty(id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/{id}")
+    public Faculty delete(@PathVariable long id) {
+        return facultyService.delete(id);
     }
 
-    @GetMapping ("/color/{color}")
-    public List<Faculty> readAll (@PathVariable String color) {
-        return facultyService.readAllFaculty(color);
+    @GetMapping("/age/{age}")
+    public List<Faculty> readAll(@PathVariable String color) {
+        return facultyService.readAll(color);
     }
+
 }
