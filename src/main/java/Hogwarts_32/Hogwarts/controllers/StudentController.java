@@ -1,7 +1,7 @@
 package Hogwarts_32.Hogwarts.controllers;
 
 import Hogwarts_32.Hogwarts.models.Student;
-import Hogwarts_32.Hogwarts.services.StudentService;
+import Hogwarts_32.Hogwarts.interfases.StudentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

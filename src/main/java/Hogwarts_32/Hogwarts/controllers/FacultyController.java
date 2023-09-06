@@ -1,8 +1,7 @@
 package Hogwarts_32.Hogwarts.controllers;
 
 import Hogwarts_32.Hogwarts.models.Faculty;
-import Hogwarts_32.Hogwarts.models.Student;
-import Hogwarts_32.Hogwarts.services.FacultyService;
+import Hogwarts_32.Hogwarts.interfases.FacultyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +49,6 @@ public class FacultyController {
 
     @GetMapping ("/color/{color}")
     public List<Faculty> readAll (@PathVariable String color) {
-        return facultyService.readAll(color);
+        return facultyService.readAllFaculty(color);
     }
 }

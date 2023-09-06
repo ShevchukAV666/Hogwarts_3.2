@@ -1,6 +1,7 @@
 package Hogwarts_32.Hogwarts.services;
 
 import Hogwarts_32.Hogwarts.exception.FacultyException;
+import Hogwarts_32.Hogwarts.interfases.FacultyService;
 import Hogwarts_32.Hogwarts.models.Faculty;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ public class FacultyServiceImpl  implements FacultyService {
 
     private long count;
 
+    @Override
     public Faculty addFaculty(Faculty faculty) {
         if (facultyMap.containsValue(faculty)) {
             throw new FacultyException("Такой факультет уже есть");
@@ -25,6 +27,7 @@ public class FacultyServiceImpl  implements FacultyService {
         return faculty;
     }
 
+    @Override
     public Faculty findFaculty(long id) {
         if (!facultyMap.containsKey(id)) {
             throw new FacultyException("Факультет не найден");
@@ -32,6 +35,7 @@ public class FacultyServiceImpl  implements FacultyService {
         return facultyMap.get(id);
     }
 
+    @Override
     public Faculty editFaculty(Faculty faculty) {
         if (!facultyMap.containsKey(faculty.getId())) {
             throw new FacultyException("Факультет не найден");
@@ -40,6 +44,7 @@ public class FacultyServiceImpl  implements FacultyService {
         return faculty;
     }
 
+    @Override
     public Faculty deleteFaculty(long id) {
         Faculty faculty = facultyMap.remove(id);
         if(faculty==null) {
@@ -48,7 +53,8 @@ public class FacultyServiceImpl  implements FacultyService {
         return faculty;
     }
 
-    public List<Faculty> readAll(String color ){
+    @Override
+    public List<Faculty> readAllFaculty(String color ){
 
         return facultyMap.values().stream()
                 .filter(st -> st.getColor() == color)
