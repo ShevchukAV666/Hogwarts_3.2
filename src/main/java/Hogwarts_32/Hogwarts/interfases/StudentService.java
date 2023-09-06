@@ -1,4 +1,4 @@
-package Hogwarts_32.Hogwarts.services;
+package Hogwarts_32.Hogwarts.interfases;
 
 import Hogwarts_32.Hogwarts.models.Student;
 

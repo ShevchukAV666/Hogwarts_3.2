@@ -1,6 +1,7 @@
 package Hogwarts_32.Hogwarts.services;
 
 import Hogwarts_32.Hogwarts.exception.StudentException;
+import Hogwarts_32.Hogwarts.interfases.StudentService;
 import Hogwarts_32.Hogwarts.models.Student;
 import org.springframework.stereotype.Service;
 

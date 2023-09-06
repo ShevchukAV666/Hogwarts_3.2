@@ -1,4 +1,4 @@
-package Hogwarts_32.Hogwarts.services;
+package Hogwarts_32.Hogwarts.interfases;
 
 import Hogwarts_32.Hogwarts.models.Faculty;
 
@@ -14,5 +14,5 @@ public interface FacultyService {
 
     public Faculty deleteFaculty(long id);
 
-    List<Faculty> readAll(String color);
+    List<Faculty> readAllFaculty(String color);
 }
