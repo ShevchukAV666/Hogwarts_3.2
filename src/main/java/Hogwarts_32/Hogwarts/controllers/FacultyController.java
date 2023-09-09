@@ -2,8 +2,11 @@ package Hogwarts_32.Hogwarts.controllers;
 
 import Hogwarts_32.Hogwarts.models.Faculty;
 import Hogwarts_32.Hogwarts.interfases.FacultyService;
+import Hogwarts_32.Hogwarts.models.Student;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -39,6 +42,18 @@ public class FacultyController {
     @GetMapping("/age/{age}")
     public List<Faculty> readAll(@PathVariable String color) {
         return facultyService.readAll(color);
+    }
+
+    @GetMapping("/filter")
+    public Collection<Faculty> getFacultyByNameOrColor(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String color) {
+        return facultyService.getByNameOrColorIgnorCase(name, color);
+    }
+
+    @GetMapping("/students-by-id/{id}")
+    public Collection<Student> getFacultyStudents(@PathVariable Long id) {
+        return facultyService.getFacultyStudents(id);
     }
 
 }

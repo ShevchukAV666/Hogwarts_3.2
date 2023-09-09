@@ -1,5 +1,6 @@
 package Hogwarts_32.Hogwarts.interfases;
 
+import Hogwarts_32.Hogwarts.models.Faculty;
 import Hogwarts_32.Hogwarts.models.Student;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface StudentService {
 
-    public Student create (Student student);
+    Student create (Student student);
 
     Student read (long id);
 
@@ -18,4 +19,7 @@ public interface StudentService {
 
     List<Student> readAll(int age);
 
+    Collection<Student> findByAgeBetween(int min, int max);
+
+    Faculty findStudentByIdFaculty(Long id);
 }
