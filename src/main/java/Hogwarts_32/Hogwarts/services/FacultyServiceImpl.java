@@ -24,7 +24,6 @@ public class FacultyServiceImpl  implements FacultyService {
         this.studentRepository = studentRepository;
     }
 
-
     @Override
     public Faculty create(Faculty faculty) {
         if (facultyRepository.findByNameAndColor(faculty.getName(), faculty.getColor()).isPresent()) {
@@ -65,21 +64,17 @@ public class FacultyServiceImpl  implements FacultyService {
         return facultyRepository.findByColor(color);
     }
 
-    public List<Student> findById(long id) {
-        return studentRepository.findByFaculty_id(id);
-    }
-
     @Override
     public Collection<Faculty> getFacultyByNameOrColor(String name, String color) {
-        return facultyRepository.findByColorOrNameIgnoreCase(name, color);
+        return facultyRepository.findByColorOrName(name, color);
     }
 
     @Override
-    public List<Student> getFacultyStudents(long id) {
-        if (!facultyRepository.existsById(id)) {
+    public List<Student> getFacultyStudents(Long id) {
+       if (!facultyRepository.existsById(id)) {
             throw new FacultyException("Такого факультета нет");
-        }
+       }
         return studentRepository.findByFaculty_id(id);
     }
-
 }
+

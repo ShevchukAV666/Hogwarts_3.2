@@ -44,10 +44,10 @@ public class FacultyController {
     }
 
     @GetMapping("/filter")
-    public  Faculty getFacultyByNameOrColor(
+    public Collection<Faculty> getFacultyByNameOrColor(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String color) {
-        return (Faculty) facultyService.getFacultyByNameOrColor(name, color);
+        return facultyService.getFacultyByNameOrColor(name, color);
     }
 
     @GetMapping("/{id}/students")

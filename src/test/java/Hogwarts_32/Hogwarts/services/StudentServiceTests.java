@@ -28,7 +28,7 @@ public class StudentServiceTests {
     @InjectMocks
     StudentServiceImpl underTest2;
 
-    Student student = new Student(1L, "Harry", 14, new Faculty(1L, "Griffindor", "red"));
+    Student student = new Student(1L, "Harry", 14);
 
     @BeforeEach
     public void setUp() {
@@ -54,10 +54,11 @@ public class StudentServiceTests {
     }
 
     @Test
-    void read() {
+    void read() { //+
         when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
-        Faculty result = underTest2.read(1L).getFaculty();
-        assertEquals(new Faculty(1L, "Griffindor", "red"), result);
+        assertEquals(student, st.read(1L));
+        verify(studentRepository, only()).findById(1L);
+
     }
 
     @Test
@@ -109,11 +110,11 @@ public class StudentServiceTests {
     void findByAgeBetween() { //+
         when(studentRepository.findByAgeBetween(12, 14)).thenReturn(List.of(student));
         List<Student> result = (List<Student>) underTest2.findByAgeBetween(12, 14);
-        assertEquals(List.of(student), result);
+        assertEquals(List.of(student), result);;
     }
 
     @Test
-    void findStudentByIdFacultyTest() { //+
+    void findStudentByIdFaculty() {
         when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
         Faculty result = underTest2.findStudentByIdFaculty(1L);
         assertEquals(new Faculty(1L, "Griffindor", "red"), result);

@@ -20,6 +20,6 @@ public interface FacultyService {
 
     Collection<Faculty> getFacultyByNameOrColor(String name, String color);
 
-    List<Student> getFacultyStudents(long id);
+    List<Student> getFacultyStudents(Long id);
 
 }

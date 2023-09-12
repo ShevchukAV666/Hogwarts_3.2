@@ -85,4 +85,8 @@ public class Faculty {
                 '}';
     }
 
+    public List<Student> getStudent() {
+        return students;
+    }
+
 }

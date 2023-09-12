@@ -37,7 +37,8 @@ public class FacultyServiceTests {
 
     Faculty faculty = new Faculty(1L, "Griffindor", "red");
 
-    Student student = new Student(1L, "Harry", 14, new Faculty(1L, "Griffindor", "red"));
+    Student student = new Student(1L, "Harry", 13);
+
 
     @BeforeEach
      public void setUp() {
@@ -65,9 +66,9 @@ public class FacultyServiceTests {
 
     @Test
     public void read() { //+
-
         when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
-        Faculty result = underTest.read(1);
+        assertEquals(faculty, facul.read(1L));
+        verify(facultyRepository, only()).findById(1L);
     }
 
     @Test
@@ -122,6 +123,20 @@ public class FacultyServiceTests {
     }
 
     @Test
+    void getFacultiesByNameOrColour() { //+
+        List<Faculty> facultyList = new ArrayList<>();
+        Faculty faculty1 = new Faculty(1L, "Gryffindor", "Red and gold");
+        Faculty faculty2 = new Faculty(2L, "gryffindor", "red and gold");
+        facultyList.add(faculty1);
+        facultyList.add(faculty2);
+
+        when(facultyRepository.findByColorOrName("Gryffindor", "Red and gold")).thenReturn(facultyList);
+        Collection<Faculty> faculties = facul.getFacultyByNameOrColor("Gryffindor","Red and gold");
+        assertEquals(2, faculties.size());
+        verify(facultyRepository, only()).findByColorOrName("Gryffindor", "Red and gold");
+    }
+
+    @Test
     void getFacultyStudents() {
         when(facultyRepository.existsById(1L)).thenReturn(true);
         when(studentRepository.findByFaculty_id(1L)).thenReturn(List.of(student));
@@ -129,9 +144,8 @@ public class FacultyServiceTests {
         assertEquals(List.of(student), result);
     }
 
-
     @Test
-    void getFacultyStudentsByFacultyException() { //+
+    void getFacultyStudentsException() { //+
         when(facultyRepository.existsById(1L)).thenReturn(false);
         FacultyException result = assertThrows(FacultyException.class, () -> underTest.getFacultyStudents(1L));
         assertThrows(FacultyException.class, () -> underTest.getFacultyStudents(1L));
