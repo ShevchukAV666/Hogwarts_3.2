@@ -70,14 +70,16 @@ public class FacultyServiceImpl  implements FacultyService {
     }
 
     @Override
-    public Collection<Faculty> getByNameOrColorIgnorCase(String name, String color) {
+    public Collection<Faculty> getFacultyByNameOrColor(String name, String color) {
         return facultyRepository.findByColorOrNameIgnoreCase(name, color);
     }
 
     @Override
-    public Collection<Student> getFacultyStudents(Long id) {
-        return facultyRepository.findById(id).map(a -> a.getStudents()).orElse(null);
+    public List<Student> getFacultyStudents(long id) {
+        if (!facultyRepository.existsById(id)) {
+            throw new FacultyException("Такого факультета нет");
+        }
+        return studentRepository.findByFaculty_id(id);
     }
 
 }
-

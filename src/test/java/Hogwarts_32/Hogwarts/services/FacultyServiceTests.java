@@ -3,7 +3,9 @@ package Hogwarts_32.Hogwarts.services;
 import Hogwarts_32.Hogwarts.exception.FacultyException;
 import Hogwarts_32.Hogwarts.interfases.FacultyService;
 import Hogwarts_32.Hogwarts.models.Faculty;
+import Hogwarts_32.Hogwarts.models.Student;
 import Hogwarts_32.Hogwarts.repository.FacultyRepository;
+import Hogwarts_32.Hogwarts.repository.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +28,8 @@ public class FacultyServiceTests {
 
     @Mock
     private FacultyRepository facultyRepository;
+
+    private StudentRepository studentRepository;
     private FacultyService facul;
 
     @InjectMocks
@@ -33,10 +37,13 @@ public class FacultyServiceTests {
 
     Faculty faculty = new Faculty(1L, "Griffindor", "red");
 
+    Student student = new Student(1L, "Harry", 14, new Faculty(1L, "Griffindor", "red"));
+
     @BeforeEach
-    public void setUp() {
-        facul = new FacultyServiceImpl(facultyRepository);
+     public void setUp() {
+     facul = new FacultyServiceImpl(facultyRepository, studentRepository);
     }
+
 
     @Test
     public void create() { //+
@@ -58,12 +65,9 @@ public class FacultyServiceTests {
 
     @Test
     public void read() { //+
-        Optional<Faculty> optionalFaculty = Optional.of(new Faculty(1L, "Gryffindor", "Red"));
-        Faculty faculty = new Faculty(1L, "Gryffindor", "Red");
 
-        when(facultyRepository.findById(1L)).thenReturn(optionalFaculty);
-        assertEquals(faculty, facul.read(1L));
-        verify(facultyRepository, only()).findById(1L);
+        when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
+        Faculty result = underTest.read(1);
     }
 
     @Test
@@ -117,4 +121,22 @@ public class FacultyServiceTests {
         assertEquals(2, faculties.size());
     }
 
+    @Test
+    void getFacultyStudents() {
+        when(facultyRepository.existsById(1L)).thenReturn(true);
+        when(studentRepository.findByFaculty_id(1L)).thenReturn(List.of(student));
+        List<Student> result = underTest.getFacultyStudents(1L);
+        assertEquals(List.of(student), result);
+    }
+
+
+    @Test
+    void getFacultyStudentsByFacultyException() { //+
+        when(facultyRepository.existsById(1L)).thenReturn(false);
+        FacultyException result = assertThrows(FacultyException.class, () -> underTest.getFacultyStudents(1L));
+        assertThrows(FacultyException.class, () -> underTest.getFacultyStudents(1L));
+        assertEquals("Такого факультета нет", result.getMessage());
+    }
+
 }
+

@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface StudentService {
 
-    Student create (Student student);
+    Student create(Student student);
 
-    Student read (long id);
+    Student read(long id);
 
-    Student update (Student student);
+    Student update(Student student);
 
-    Student delete (long id);
+    Student delete(long id);
 
     List<Student> readAll(int age);
 

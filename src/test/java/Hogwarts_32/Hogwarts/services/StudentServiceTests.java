@@ -1,6 +1,5 @@
 package Hogwarts_32.Hogwarts.services;
 
-import Hogwarts_32.Hogwarts.exception.FacultyException;
 import Hogwarts_32.Hogwarts.exception.StudentException;
 import Hogwarts_32.Hogwarts.interfases.StudentService;
 import Hogwarts_32.Hogwarts.models.Faculty;
@@ -13,10 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -32,7 +28,7 @@ public class StudentServiceTests {
     @InjectMocks
     StudentServiceImpl underTest2;
 
-    Student student = new Student(1L, "Harry", 14);
+    Student student = new Student(1L, "Harry", 14, new Faculty(1L, "Griffindor", "red"));
 
     @BeforeEach
     public void setUp() {
@@ -59,12 +55,9 @@ public class StudentServiceTests {
 
     @Test
     void read() {
-        Optional<Student> optionalStudent = Optional.of(new Student(1L, "Harry", 14));
-        Student student = new Student(1L, "Harry", 14);
-
-        when(studentRepository.findById(1L)).thenReturn(optionalStudent);
-        assertEquals(student, st.read(1L));
-        verify(studentRepository, only()).findById(1L);
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
+        Faculty result = underTest2.read(1L).getFaculty();
+        assertEquals(new Faculty(1L, "Griffindor", "red"), result);
     }
 
     @Test
@@ -107,15 +100,23 @@ public class StudentServiceTests {
 
     @Test
     void readAll() { //+
-        List<Student> studentList = new ArrayList<>();
-        Student student = new Student(1L, "Harry", 23);
-        Student student2 = new Student(2L, "Ron", 23);
-        studentList.add(student);
-        studentList.add(student2);
+        when(studentRepository.findByAge(14)).thenReturn(List.of(student));
+        List<Student> result = underTest2.readAll(14);
+        assertEquals(List.of(student), result);
+    }
 
-        when(studentRepository.findByAge(23)).thenReturn(studentList);
-        Collection<Student> students = st.readAll(23);
-        assertEquals(2, students.size());
+    @Test
+    void findByAgeBetween() { //+
+        when(studentRepository.findByAgeBetween(12, 14)).thenReturn(List.of(student));
+        List<Student> result = (List<Student>) underTest2.findByAgeBetween(12, 14);
+        assertEquals(List.of(student), result);
+    }
+
+    @Test
+    void findStudentByIdFacultyTest() { //+
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
+        Faculty result = underTest2.findStudentByIdFaculty(1L);
+        assertEquals(new Faculty(1L, "Griffindor", "red"), result);
     }
 
 }

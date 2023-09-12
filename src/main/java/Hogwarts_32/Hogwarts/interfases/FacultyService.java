@@ -18,8 +18,8 @@ public interface FacultyService {
 
     List<Faculty> readAll(String color);
 
-    Collection<Faculty> getByNameOrColorIgnorCase(String name, String color);
+    Collection<Faculty> getFacultyByNameOrColor(String name, String color);
 
-    Collection<Student> getFacultyStudents(Long id);
+    List<Student> getFacultyStudents(long id);
 
 }
