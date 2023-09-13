@@ -28,7 +28,7 @@ public class FacultyServiceTests {
 
     @Mock
     private FacultyRepository facultyRepository;
-
+    @Mock
     private StudentRepository studentRepository;
     private FacultyService facul;
 
@@ -94,7 +94,7 @@ public class FacultyServiceTests {
     }
 
     @Test
-    public void delete() {
+    public void delete() { //+
         when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
         doNothing().when(facultyRepository).deleteById(1L);
         Faculty result = underTest.delete(1L);
@@ -102,7 +102,7 @@ public class FacultyServiceTests {
     }
 
     @Test
-    void deleteFacultyException() {
+    void deleteFacultyException() { //+
         when(facultyRepository.findById(1L)).thenReturn(Optional.empty());
         FacultyException result = assertThrows(FacultyException.class, () -> underTest.read(1L));
         assertThrows(FacultyException.class, () -> underTest.read(1L));
@@ -137,7 +137,7 @@ public class FacultyServiceTests {
     }
 
     @Test
-    void getFacultyStudents() {
+    void getFacultyStudents() { //+
         when(facultyRepository.existsById(1L)).thenReturn(true);
         when(studentRepository.findByFaculty_id(1L)).thenReturn(List.of(student));
         List<Student> result = underTest.getFacultyStudents(1L);

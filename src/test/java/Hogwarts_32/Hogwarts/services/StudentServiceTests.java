@@ -114,10 +114,12 @@ public class StudentServiceTests {
     }
 
     @Test
-    void findStudentByIdFaculty() {
+    void findStudentByIdFaculty() { //+
+        Faculty faculty = new Faculty(1L, "Griffindor", "red");
+        student.setFaculty(faculty);
         when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
-        Faculty result = underTest2.findStudentByIdFaculty(1L);
-        assertEquals(new Faculty(1L, "Griffindor", "red"), result);
+        Faculty result = underTest2.findStudentByIdFaculty(student.getId());
+        assertEquals(faculty, result);
     }
 
 }
