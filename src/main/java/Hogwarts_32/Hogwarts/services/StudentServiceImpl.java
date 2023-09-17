@@ -2,11 +2,13 @@ package Hogwarts_32.Hogwarts.services;
 
 import Hogwarts_32.Hogwarts.exception.StudentException;
 import Hogwarts_32.Hogwarts.interfases.StudentService;
+import Hogwarts_32.Hogwarts.models.Faculty;
 import Hogwarts_32.Hogwarts.models.Student;
 import Hogwarts_32.Hogwarts.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Collection;
 import java.util.List;
 
 import java.util.Optional;
@@ -65,5 +67,15 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> readAll(int age) {
 
         return studentRepository.findByAge(age);
+    }
+
+    @Override
+    public Collection<Student> findByAgeBetween(int min, int max) {
+        return studentRepository.findByAgeBetween(min, max);
+    }
+
+    @Override
+    public Faculty findStudentByIdFaculty(Long id) {
+        return read(id).getFaculty();
     }
 }

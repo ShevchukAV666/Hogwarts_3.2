@@ -3,7 +3,9 @@ package Hogwarts_32.Hogwarts.services;
 import Hogwarts_32.Hogwarts.exception.FacultyException;
 import Hogwarts_32.Hogwarts.interfases.FacultyService;
 import Hogwarts_32.Hogwarts.models.Faculty;
+import Hogwarts_32.Hogwarts.models.Student;
 import Hogwarts_32.Hogwarts.repository.FacultyRepository;
+import Hogwarts_32.Hogwarts.repository.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +28,8 @@ public class FacultyServiceTests {
 
     @Mock
     private FacultyRepository facultyRepository;
+    @Mock
+    private StudentRepository studentRepository;
     private FacultyService facul;
 
     @InjectMocks
@@ -33,10 +37,14 @@ public class FacultyServiceTests {
 
     Faculty faculty = new Faculty(1L, "Griffindor", "red");
 
+    Student student = new Student(1L, "Harry", 13);
+
+
     @BeforeEach
-    public void setUp() {
-        facul = new FacultyServiceImpl(facultyRepository);
+     public void setUp() {
+     facul = new FacultyServiceImpl(facultyRepository, studentRepository);
     }
+
 
     @Test
     public void create() { //+
@@ -58,10 +66,7 @@ public class FacultyServiceTests {
 
     @Test
     public void read() { //+
-        Optional<Faculty> optionalFaculty = Optional.of(new Faculty(1L, "Gryffindor", "Red"));
-        Faculty faculty = new Faculty(1L, "Gryffindor", "Red");
-
-        when(facultyRepository.findById(1L)).thenReturn(optionalFaculty);
+        when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
         assertEquals(faculty, facul.read(1L));
         verify(facultyRepository, only()).findById(1L);
     }
@@ -89,7 +94,7 @@ public class FacultyServiceTests {
     }
 
     @Test
-    public void delete() {
+    public void delete() { //+
         when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
         doNothing().when(facultyRepository).deleteById(1L);
         Faculty result = underTest.delete(1L);
@@ -97,7 +102,7 @@ public class FacultyServiceTests {
     }
 
     @Test
-    void deleteFacultyException() {
+    void deleteFacultyException() { //+
         when(facultyRepository.findById(1L)).thenReturn(Optional.empty());
         FacultyException result = assertThrows(FacultyException.class, () -> underTest.read(1L));
         assertThrows(FacultyException.class, () -> underTest.read(1L));
@@ -117,4 +122,35 @@ public class FacultyServiceTests {
         assertEquals(2, faculties.size());
     }
 
+    @Test
+    void getFacultiesByNameOrColour() { //+
+        List<Faculty> facultyList = new ArrayList<>();
+        Faculty faculty1 = new Faculty(1L, "Gryffindor", "Red and gold");
+        Faculty faculty2 = new Faculty(2L, "gryffindor", "red and gold");
+        facultyList.add(faculty1);
+        facultyList.add(faculty2);
+
+        when(facultyRepository.findByColorOrName("Gryffindor", "Red and gold")).thenReturn(facultyList);
+        Collection<Faculty> faculties = facul.getFacultyByNameOrColor("Gryffindor","Red and gold");
+        assertEquals(2, faculties.size());
+        verify(facultyRepository, only()).findByColorOrName("Gryffindor", "Red and gold");
+    }
+
+    @Test
+    void getFacultyStudents() { //+
+        when(facultyRepository.existsById(1L)).thenReturn(true);
+        when(studentRepository.findByFaculty_id(1L)).thenReturn(List.of(student));
+        List<Student> result = underTest.getFacultyStudents(1L);
+        assertEquals(List.of(student), result);
+    }
+
+    @Test
+    void getFacultyStudentsException() { //+
+        when(facultyRepository.existsById(1L)).thenReturn(false);
+        FacultyException result = assertThrows(FacultyException.class, () -> underTest.getFacultyStudents(1L));
+        assertThrows(FacultyException.class, () -> underTest.getFacultyStudents(1L));
+        assertEquals("Такого факультета нет", result.getMessage());
+    }
+
 }
+

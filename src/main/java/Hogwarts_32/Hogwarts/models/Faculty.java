@@ -1,8 +1,12 @@
 package Hogwarts_32.Hogwarts.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,7 +18,11 @@ public class Faculty {
     private String name;
     private String color;
 
-    public Faculty(long id, String name, String color) {
+    @OneToMany(mappedBy = "faculty")
+    @JsonIgnore
+    private List<Student> students;
+
+    public Faculty(Long id, String name, String color) {
         this.id = id;
         this.name = name;
         this.color = color;
@@ -47,6 +55,14 @@ public class Faculty {
         this.color = color;
     }
 
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,4 +84,9 @@ public class Faculty {
                 ", color='" + color + '\'' +
                 '}';
     }
+
+    public List<Student> getStudent() {
+        return students;
+    }
+
 }
